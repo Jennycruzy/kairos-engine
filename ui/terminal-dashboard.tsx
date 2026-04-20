@@ -657,7 +657,10 @@ export default function TerminalDashboard() {
     try {
       const res = await fetch('/api/analyze', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Kairos-UI': 'true',   // bypass x402 gate for the dashboard UI
+        },
         body: JSON.stringify(input),
       })
       const data = await res.json() as { ok: boolean; report?: LaunchAdvisorReport; error?: string }

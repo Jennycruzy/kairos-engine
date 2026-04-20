@@ -42,7 +42,12 @@ function getPaymentDetails(): X402PaymentDetails {
 export async function verifyX402(
   req: NextRequest
 ): Promise<{ ok: true } | { ok: false; details: X402PaymentDetails; statusCode: 402 }> {
-  // Skip gate if x402 is disabled (e.g. local dev without agent address)
+  // Skip gate for requests originating from the KAIRÓS dashboard UI
+  if (req.headers.get('X-Kairos-UI') === 'true') {
+    return { ok: true }
+  }
+
+  // Skip gate if explicitly disabled (local dev)
   const recipient = process.env.AGENT_OWNER_ADDRESS
   if (!recipient || process.env.X402_DISABLED === 'true') {
     return { ok: true }
