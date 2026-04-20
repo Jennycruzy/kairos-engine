@@ -154,14 +154,11 @@ function connect() {
 
   log(`Connecting to Bitquery stream... (attempt ${retryCount + 1}/${MAX_RETRIES + 1})`)
 
-  // Bitquery EAP validates auth at the HTTP WebSocket upgrade level.
-  // Token must be passed as a URL query parameter — connectionParams arrive too late.
+  // Bitquery V2: auth is URL query param only — connectionParams are NOT used.
+  // Token must be the OAuth access token (ory_at_...) from the Bitquery IDE.
   const urlWithToken = `${wsEndpoint}?token=${apiKey}`
   wsClient = createClient({
     url: urlWithToken,
-    connectionParams: () => ({
-      Authorization: `Bearer ${apiKey}`,
-    }),
   })
 
   const observable = wsClient.iterate({ query: GRADUATION_SUBSCRIPTION })
@@ -180,9 +177,9 @@ function connect() {
     } catch (err) {
       if (!active) return
       const msg = (err as Error).message
-      // 402 = streaming tier not included in free plan — retrying won't help
+      // 402 = token rejected — usually wrong token type (need OAuth ory_at_... not raw API key)
       if (msg.includes('402')) {
-        log('Bitquery streaming requires a paid plan (402). Falling back to simulation mode.', 'WARN')
+        log('Bitquery 402: check BITQUERY_API_KEY is the OAuth token (ory_at_...) from the Bitquery IDE. Falling back to simulation.', 'WARN')
         simulationMode()
         return
       }
