@@ -179,14 +179,22 @@ function connect() {
       }
     } catch (err) {
       if (!active) return
-      log(`Stream error: ${(err as Error).message}`, 'WARN')
+      const msg = (err as Error).message
+      // 402 = streaming tier not included in free plan — retrying won't help
+      if (msg.includes('402')) {
+        log('Bitquery streaming requires a paid plan (402). Falling back to simulation mode.', 'WARN')
+        simulationMode()
+        return
+      }
+      log(`Stream error: ${msg}`, 'WARN')
       if (retryCount < MAX_RETRIES) {
         const delay = BASE_DELAY_MS * Math.pow(2, retryCount)
         retryCount++
         log(`Reconnecting in ${delay}ms... (retry ${retryCount}/${MAX_RETRIES})`, 'WARN')
         setTimeout(connect, delay)
       } else {
-        log('Max retries reached. Argos going dark.', 'ABORT')
+        log('Max retries reached. Falling back to simulation mode.', 'WARN')
+        simulationMode()
       }
     }
   })()
