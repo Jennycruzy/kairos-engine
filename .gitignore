@@ -1,0 +1,9 @@
+node_modules/
+.next/
+.env
+.env.local
+.kairos-agent-id
+*.log
+.DS_Store
+dist/
+out/
