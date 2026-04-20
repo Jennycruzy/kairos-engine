@@ -154,10 +154,11 @@ function connect() {
 
   log(`Connecting to Bitquery stream... (attempt ${retryCount + 1}/${MAX_RETRIES + 1})`)
 
-  // Bitquery EAP streaming requires token as a function returning connectionParams
-  // and uses 'Authorization' at top-level (not nested under 'headers')
+  // Bitquery EAP validates auth at the HTTP WebSocket upgrade level.
+  // Token must be passed as a URL query parameter — connectionParams arrive too late.
+  const urlWithToken = `${wsEndpoint}?token=${apiKey}`
   wsClient = createClient({
-    url: wsEndpoint,
+    url: urlWithToken,
     connectionParams: () => ({
       Authorization: `Bearer ${apiKey}`,
     }),
