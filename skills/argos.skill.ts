@@ -143,7 +143,7 @@ function handleTrade(trade: BitqueryTrade) {
 
 // ─── CONNECT ─────────────────────────────────────────────────────────────────
 function connect() {
-  const wsEndpoint = process.env.BITQUERY_WS_ENDPOINT || 'wss://streaming.bitquery.io/eap'
+  const wsEndpoint = process.env.BITQUERY_WS_ENDPOINT || 'wss://streaming.bitquery.io/graphql'
   const apiKey = process.env.BITQUERY_API_KEY
 
   if (!apiKey) {

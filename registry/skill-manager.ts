@@ -136,13 +136,6 @@ export class SkillManager extends EventEmitter {
       skillSource: 'SYSTEM',
       agentId,
     })
-
-    // Update on-chain manifest (best-effort)
-    try {
-      await agentIdentityModule.updateAgentSkills(agentId, this.injectedSkills)
-    } catch {
-      // Non-fatal — skill is loaded regardless
-    }
   }
 
   async injectAll(agentId: string): Promise<void> {
