@@ -36,7 +36,7 @@ export const ENGINE_MODE_A = 'PRE_LAUNCH'
 export const ENGINE_MODE_B = 'POST_LAUNCH'
 
 // ─── ERC-8004 AGENT IDENTITY ──────────────────────────────────────────────────
-export const ERC8004_REGISTRY_ADDRESS_BNB = '0x' as const   // TODO: replace with deployed registry on BNB mainnet
+export const ERC8004_REGISTRY_ADDRESS_BNB = '0x8004A169FB4a3325136EB29fA0ceB6D2e539a432' as const
 export const ERC8004_REGISTRY_ADDRESS_BASE = '0x' as const  // TODO: replace with deployed registry on Base
 export const AGENT_METADATA_VERSION = '2.0.0'
 export const AGENT_NAME = 'KAIRÓS Engine'
