@@ -154,12 +154,13 @@ function connect() {
 
   log(`Connecting to Bitquery stream... (attempt ${retryCount + 1}/${MAX_RETRIES + 1})`)
 
-  // TODO: replace with live call — method: createClient({ url: wsEndpoint, connectionParams: { headers: { Authorization: `Bearer ${apiKey}` } } })
+  // Bitquery EAP streaming requires token as a function returning connectionParams
+  // and uses 'Authorization' at top-level (not nested under 'headers')
   wsClient = createClient({
     url: wsEndpoint,
-    connectionParams: {
-      headers: { Authorization: `Bearer ${apiKey}` },
-    },
+    connectionParams: () => ({
+      Authorization: `Bearer ${apiKey}`,
+    }),
   })
 
   const observable = wsClient.iterate({ query: GRADUATION_SUBSCRIPTION })
