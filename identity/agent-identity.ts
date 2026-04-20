@@ -103,7 +103,7 @@ export async function registerAgent(
 
   const { walletClient, publicClient, account } = buildClients()
 
-  if (ERC8004_REGISTRY_ADDRESS_BNB === '0x') {
+  if (ERC8004_REGISTRY_ADDRESS_BNB.length < 10) {
     // Dev / CI fallback — registry not yet deployed
     log('ERC-8004 registry address not configured — using synthetic agent ID for local dev.', 'WARN')
     const syntheticId = `0x${'k41r05'.repeat(5)}` as `0x${string}`
@@ -164,7 +164,7 @@ export async function registerAgent(
 export async function resolveAgent(agentId: string): Promise<AgentResolutionResult> {
   log(`Resolving agent identity from chain... ID: ${agentId.slice(0, 6)}...${agentId.slice(-4)}`)
 
-  if (ERC8004_REGISTRY_ADDRESS_BNB === '0x') {
+  if (ERC8004_REGISTRY_ADDRESS_BNB.length < 10) {
     log('ERC-8004 registry not deployed — returning synthetic resolution for local dev.', 'WARN')
     return buildSyntheticResolution(agentId)
   }
@@ -216,7 +216,7 @@ export async function updateAgentSkills(
 ): Promise<string> {
   log(`Updating on-chain skill manifest for agent ${agentId.slice(0, 6)}...`)
 
-  if (ERC8004_REGISTRY_ADDRESS_BNB === '0x') {
+  if (ERC8004_REGISTRY_ADDRESS_BNB.length < 10) {
     log('ERC-8004 registry not deployed — skipping on-chain update for local dev.', 'WARN')
     return '0x' + '0'.repeat(64)
   }
