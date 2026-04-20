@@ -151,7 +151,7 @@ export interface KairosEvent {
 }
 
 export interface MonologueLine {
-  source: 'KAIROS' | 'ARGOS' | 'THEMIS' | 'MNEMON' | 'HERMES' | 'MNEMOSYNE' | 'ADVISOR' | 'IDENTITY' | 'SYSTEM'
+  source: 'KAIROS' | 'ARGOS' | 'THEMIS' | 'MNEMON' | 'HERMES' | 'MNEMOSYNE' | 'ADVISOR' | 'IDENTITY' | 'SYSTEM' | 'AGORA'
   text: string
   level: 'INFO' | 'SUCCESS' | 'WARN' | 'ABORT'
   timestamp: Date
@@ -198,4 +198,40 @@ export interface EngineStatus {
   activeTokens: number
   advisorSessionActive: boolean
   uptime: number
+}
+
+// ─── AGORA BOUNTY TYPES ───────────────────────────────────────────────────────
+
+export interface BountySubmission {
+  id: string
+  wallet: string           // BNB address for payout
+  postUrl: string          // Link to the X/Farcaster post as proof
+  submittedAt: Date
+  paid: boolean
+  txHash?: string          // BNB transfer tx hash once paid
+}
+
+export interface Bounty {
+  id: string
+  tokenTicker: string
+  sovereignName: string    // e.g. "Kronos the Temporal Sovereign"
+  loreParagraph: string    // Short lore excerpt for the post prompt
+  rewardBNB: number        // e.g. 0.0003 (~$0.10)
+  maxSlots: number         // Max humans that can claim (e.g. 5)
+  submissions: BountySubmission[]
+  createdAt: Date
+  closedAt?: Date
+  status: 'OPEN' | 'FULL' | 'CLOSED'
+}
+
+// ─── X402 TYPES ───────────────────────────────────────────────────────────────
+
+export interface X402PaymentDetails {
+  network: string
+  chainId: number
+  token: string
+  amount: string           // BNB amount as string e.g. "0.0003"
+  recipient: string        // Agent wallet address
+  description: string
+  instructions: string
 }

@@ -22,6 +22,7 @@ const SOURCE_COLORS: Record<MonologueLine['source'], string> = {
   ADVISOR:   '#fb923c',
   IDENTITY:  '#fcd34d',
   SYSTEM:    '#6b7280',
+  AGORA:     '#f472b6',
 }
 
 function levelColor(level: MonologueLine['level'], source: MonologueLine['source']): string {

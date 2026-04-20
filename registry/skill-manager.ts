@@ -19,6 +19,7 @@ import { generateLore, setMonologueCallback as mnemonLog } from '@/skills/mnemon
 import * as argos from '@/skills/argos.skill'
 import { broadcast, setMonologueCallback as hermesLog } from '@/skills/hermes.skill'
 import { analyze, setMonologueCallback as advisorLog, setEventEmitter as advisorEvents } from '@/skills/launch-advisor.skill'
+import * as agora from '@/skills/agora.skill'
 import { setMonologueCallback as identityLog } from '@/identity/agent-identity'
 
 // ─── SKILL MANAGER ────────────────────────────────────────────────────────────
@@ -52,6 +53,7 @@ export class SkillManager extends EventEmitter {
     argos.setMonologueCallback(cb)
     hermesLog(cb)
     advisorLog(cb)
+    agora.setMonologueCallback(cb)
   }
 
   private pushMonologue(
@@ -149,6 +151,7 @@ export class SkillManager extends EventEmitter {
       ['hermes', 'Loading Hermes — Farcaster Broadcaster...'],
       ['mnemosyne', 'Loading Mnemosyne — Greenfield Archivist...'],
       ['launch-advisor', 'Loading Launch Advisor — Pre-launch Oracle...'],
+      ['agora', 'Loading Agora — Human Hiring Protocol...'],
     ]
 
     for (const [name, label] of skills) {
@@ -189,6 +192,11 @@ export class SkillManager extends EventEmitter {
       // Mnemon lore
       const lore = await generateLore(token, auditReport.similarityScore)
       this.emitEvent({ type: 'LORE_READY', payload: lore, mode: 'POST_LAUNCH', skillSource: 'MNEMON' })
+
+      // Agora — create human bounty for this graduated token
+      const bounty = agora.createBounty(token, lore)
+      const bountyUrl = agora.getBountyUrl(bounty.id)
+      this.emitEvent({ type: 'SKILL_INJECTED', payload: { bountyId: bounty.id, bountyUrl }, mode: 'POST_LAUNCH', skillSource: 'AGORA' })
 
       // Hermes broadcast
       const bondingSnapshot = {
